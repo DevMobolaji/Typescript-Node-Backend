@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import HttpException from "utils/exceptions/http.exception"
 
-function ErrorMiddleware(
+async function ErrorMiddleware(
     error: HttpException,
     req: Request,
     res: Response,
-    next: NextFunction): void {
+    next: NextFunction): Promise<void> {
     const status = error.statusCode || 500;
     const message = error.message || "Something went wrong"
 
@@ -15,4 +15,4 @@ function ErrorMiddleware(
     })
 }
 
-export default ErrorMiddleware
+export default ErrorMiddleware;
