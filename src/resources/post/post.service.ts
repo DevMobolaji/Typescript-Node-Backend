@@ -4,7 +4,6 @@ import postModel from "./post.model";
 class PostService {
     private post = postModel;
 
-
     public async create(title: string, body: string): Promise<Post> {
         try {
             const post = this.post.create({ title, body })

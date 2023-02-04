@@ -5,8 +5,8 @@ import cors from "cors";
 import morgan from "morgan";
 import compression from "compression";
 import Controller from "utils/interfaces/controller.interface";
-import ErrorMiddleware from "middleware/error.middleware";
 import helmet from "helmet";
+import ErrorMiddleware from "middleware/error.middleware";
 
 
 class App {
