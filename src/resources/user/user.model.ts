@@ -1,6 +1,6 @@
 import { Schema, Model, model } from "mongoose";
 import bcryptjs from "bcryptjs";
-import User from "resources/user/user.interface";
+import User from "@/resources/user/user.interface";
 
 const userSchema = new Schema({
     name: {
@@ -16,9 +16,14 @@ const userSchema = new Schema({
     password: {
         type: String,
     },
-    role: {
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    roles: {
         type: String,
-        required: true,
+        enum: ["Admin", "User"],
+        default: "User",
     },
 }, { timestamps: true }
 )

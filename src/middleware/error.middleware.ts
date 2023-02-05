@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import HttpException from "utils/exceptions/http.exception"
+import HttpException from "@/utils/exceptions/http.exception"
 
 async function ErrorMiddleware(
     error: HttpException,

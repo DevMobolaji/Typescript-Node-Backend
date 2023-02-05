@@ -2,11 +2,11 @@ import express, { Application } from "express";
 import mongoose from "mongoose";
 import Compression from "compression";
 import cors from "cors";
-import morgan from "morgan";
 import compression from "compression";
-import Controller from "utils/interfaces/controller.interface";
+import Controller from "@/utils/interfaces/controller.interface";
 import helmet from "helmet";
-import ErrorMiddleware from "middleware/error.middleware";
+import morgan from "morgan";
+import ErrorMiddleware from "@/middleware/error.middleware";
 
 
 class App {
