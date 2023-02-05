@@ -16,9 +16,14 @@ const userSchema = new Schema({
     password: {
         type: String,
     },
-    role: {
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    roles: {
         type: String,
-        required: true,
+        enum: ["Admin", "User"],
+        default: "User",
     },
 }, { timestamps: true }
 )

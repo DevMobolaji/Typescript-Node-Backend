@@ -19,7 +19,7 @@ async function authenticatedMiddleware(
     const accessToken = bearer.split("bearer ")[1].trim();
 
     try {
-        const payload: Token | jwt.JsonWebTokenError = await verifyToken(accessToken);
+        const payload: jwt.VerifyErrors | Token = await verifyToken(accessToken);
         if (payload instanceof jwt.JsonWebTokenError) {
             return next(new HttpException(401, "Unauthorized"))
         }
@@ -37,4 +37,4 @@ async function authenticatedMiddleware(
     }
 }
 
-export default authenticatedMiddleware
+export default authenticatedMiddleware 

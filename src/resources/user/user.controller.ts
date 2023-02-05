@@ -4,7 +4,9 @@ import HttpException from "utils/exceptions/http.exception";
 import validationMiddleware from "middleware/validation.middleware";
 import validate from "resources/user/user.validation";
 import UserService from "./user.service"
+import authorizedRole from "middleware/authorizedRole.middleware"
 import authenticatedMiddleware from "middleware/authenticated.middleware";
+import checkPermission from "middleware/permission.middleware";
 
 class UserController {
     public path = "/auth";
@@ -26,7 +28,8 @@ class UserController {
             validationMiddleware(validate.Login),
             this.login);
 
-        this.router.get(`${this.path}`, authenticatedMiddleware, this.getUser)
+        this.router.get(`${this.path}`, authenticatedMiddleware, authorizedRole("Admin"), this.getUser)
+        this.router.get(`${this.path}/:id`, authenticatedMiddleware, authorizedRole("Admin"), this.getSingleUser)
     };
 
     private register = async (
@@ -37,7 +40,7 @@ class UserController {
         try {
             const { name, email, password, role } = req.body;
 
-            const token = await this.UserService.register(name, email, password, "user");
+            const token = await this.UserService.register(name, email, password, role);
             res.status(201).json({ token })
         } catch (err: any) {
             next(new HttpException(400, err.message));
@@ -70,6 +73,19 @@ class UserController {
 
         res.status(200).json({ user: req.user })
     }
+
+    private getSingleUser = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<any> => {
+        const user = await this.UserService.getSingleUser(req.params.id);
+        console.log(user)
+
+        //checkPermission(req.user, (user._id as any))
+        res.status(200).json({ user: req.user })
+    }
+
 }
 
 export default UserController; 

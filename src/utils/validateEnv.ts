@@ -2,7 +2,7 @@
 import { cleanEnv, str, port } from 'envalid'
 
 
-function validateEnv(): void {
+function validateEnvVariables(): void {
     cleanEnv(process.env, {
         NODE_ENV: str({
             choices: ['development', 'production']
@@ -15,4 +15,4 @@ function validateEnv(): void {
     })
 }
 
-export default validateEnv
+export default validateEnvVariables;
