@@ -1,6 +1,6 @@
-import token from "utils/Token";
+import token from "@/utils/Token";
 import userModel from "./user.model";
-import HttpException from "utils/exceptions/http.exception";
+import HttpException from "@/utils/exceptions/http.exception";
 
 class UserService {
     private user = userModel;
@@ -51,6 +51,5 @@ class UserService {
     }
 }
 /* Attempt to login the user*/
-
 
 export default UserService;

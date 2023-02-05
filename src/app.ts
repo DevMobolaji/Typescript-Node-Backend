@@ -3,10 +3,10 @@ import mongoose from "mongoose";
 import Compression from "compression";
 import cors from "cors";
 import compression from "compression";
-import Controller from "utils/interfaces/controller.interface";
+import Controller from "@/utils/interfaces/controller.interface";
 import helmet from "helmet";
 import morgan from "morgan";
-import ErrorMiddleware from "middleware/error.middleware";
+import ErrorMiddleware from "@/middleware/error.middleware";
 
 
 class App {
@@ -20,7 +20,7 @@ class App {
         this.initializeDatabaseConnection();
         this.initializeMiddleware();
         this.initializeController(controllers);
-        //this.initializeErrorMiddleware();
+        this.initializeErrorMiddleware();
     }
 
     private initializeMiddleware(): void {

@@ -1,5 +1,5 @@
 import { Request } from "express";
-import HttpException from "utils/exceptions/http.exception";
+import HttpException from "@/utils/exceptions/http.exception";
 
 async function checkPermission(req: any, userId: string): Promise<boolean> {
     if (req.roles === "Admin") return true;
