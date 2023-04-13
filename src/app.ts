@@ -1,19 +1,18 @@
 import express, { Application } from "express";
-import mongoose from "mongoose";
-import Compression from "compression";
-import cors from "cors";
 import compression from "compression";
+import cors from "cors";
 import Controller from "@/utils/interfaces/controller.interface";
 import helmet from "helmet";
 import morgan from "morgan";
 import ErrorMiddleware from "@/middleware/error.middleware";
+import { mongoConnect } from "@/utils/mongoConnect"
 
 
 class App {
     public express: Application;
     public port: number
 
-    constructor(controllers: Controller[], port: number) {
+    constructor(public controllers: Controller[], port: number) {
         this.express = express();
         this.port = port;
 
@@ -44,8 +43,7 @@ class App {
 
     private initializeDatabaseConnection(): void {
         //initialize mongodb connection
-        const { MONGO_USER, MONGO_PASSWORD, MONGO_PATH } = process.env;
-
+        mongoConnect()
     }
 
     public listen(): void {

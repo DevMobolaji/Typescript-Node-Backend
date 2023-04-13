@@ -3,7 +3,7 @@ import Controller from "@/utils/interfaces/controller.interface";
 import validate from "@/resources/post/post.validation"
 import PostService from "@/resources/post/post.service";
 import validationMiddleware from "@/middleware/validation.middleware"
-import HttpException from "@/utils/exceptions/http.exception";
+import HttpException from "@/utils/exceptions/errors/http.exception";
 
 class PostController implements Controller {
     public path = "/posts";
@@ -34,7 +34,7 @@ class PostController implements Controller {
 
             res.status(200).json({ post })
         } catch (err) {
-            next(new HttpException(400, "cannot create post"))
+            return
         }
     }
 }

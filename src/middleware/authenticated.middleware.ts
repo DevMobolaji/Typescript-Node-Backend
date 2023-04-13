@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction, Router } from "express";
 import { verifyToken } from "@/utils/Token";
-import userModel from "@/resources/user/user.model";
+import userModel from "@/resources/Auth/auth.model";
 import Token from "@/utils/interfaces/token.interface";
-import HttpException from "@/utils/exceptions/http.exception";
 import jwt from "jsonwebtoken";
+import CustomError from "@/utils/exceptions/errors"
 
 async function authenticatedMiddleware(
     req: Request,
@@ -13,7 +13,7 @@ async function authenticatedMiddleware(
     const bearer = req.headers.authorization;
 
     if (!bearer || !bearer.startsWith('bearer ')) {
-        return next(new HttpException(401, "Unauthorized"))
+        return next(new CustomError.UnauthenticatedError("User not authenticated"));
     }
 
     const accessToken = bearer.split("bearer ")[1].trim();
@@ -21,13 +21,14 @@ async function authenticatedMiddleware(
     try {
         const payload: jwt.VerifyErrors | Token = await verifyToken(accessToken);
         if (payload instanceof jwt.JsonWebTokenError) {
-            return next(new HttpException(401, "Unauthorized"))
+            return next(new CustomError.UnauthenticatedError("User not authenticated"));
         }
 
         const user = await userModel.findById(payload.id).select("-password").exec();
+        console.log(user)
 
         if (!user) {
-            return next(new HttpException(401, "Unauthorized"))
+            return next(new CustomError.UnauthenticatedError("User not authenticated"));
         }
 
         req.user = user
