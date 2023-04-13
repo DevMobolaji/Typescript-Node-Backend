@@ -1,8 +1,8 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add @types/envalid @types/joi @types/jsonwebtoken @types/morgan -D
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add http-status-code
 
 PATH: 
-  C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\Git\cmd;C:\Program Files\Docker\Docker\resources\bin;C:\Users\Tech Prof\scoop\shims;C:\Users\Tech Prof\AppData\Local\Microsoft\WindowsApps;;C:\Users\Tech Prof\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Tech Prof\AppData\Roaming\npm;C:\Users\Tech Prof\AppData\Local\Yarn\bin
+  C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\Git\cmd;C:\Program Files\Docker\Docker\resources\bin;C:\Users\Tech Prof\scoop\shims;C:\Users\Tech Prof\AppData\Local\Microsoft\WindowsApps;;C:\Users\Tech Prof\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Tech Prof\AppData\Roaming\npm;C:\Users\Tech Prof\AppData\Local\Yarn\bin;C:\Program Files\heroku\bin;C:\Users\Tech Prof\AppData\Local\Microsoft\WindowsApps
 
 Yarn version: 
   1.22.4
@@ -14,17 +14,8 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2fenvalid: Not found
-      at params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:66096:18)
-      at self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:140748:22)
-      at Request.emit (node:events:513:28)
-      at Request.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:141720:10)
-      at Request.emit (node:events:513:28)
-      at IncomingMessage.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:141642:12)
-      at Object.onceWrapper (node:events:627:28)
-      at IncomingMessage.emit (node:events:525:35)
-      at endReadableNT (node:internal/streams/readable:1359:12)
-      at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+  Error: getaddrinfo ENOTFOUND registry.yarnpkg.com
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (node:dns:107:26)
 
 npm manifest: 
   {
@@ -34,7 +25,7 @@ npm manifest:
     "main": "index.js",
     "scripts": {
       "start": "nodemon --exec ts-node --files src/index.ts",
-      "dev": "tsc-watch --onSuccess \"node ./dist/index.js\"",
+      "dev2": "tsc-watch --onSuccess \"node ./dist/index.js\"",
       "build": "tsc",
       "postInstall": "npm run build",
       "watch": "tsc -w",
@@ -49,6 +40,7 @@ npm manifest:
       "@types/cors": "^2.8.13",
       "@types/express": "^4.17.16",
       "@types/helmet": "^4.0.0",
+      "@types/joi": "^17.2.3",
       "@types/jsonwebtoken": "^9.0.1",
       "@types/morgan": "^1.9.4",
       "@types/node": "^18.11.18",
@@ -1016,6 +1008,13 @@ Lockfile:
     dependencies:
       helmet "*"
   
+  "@types/joi@^17.2.3":
+    version "17.2.3"
+    resolved "https://registry.yarnpkg.com/@types/joi/-/joi-17.2.3.tgz#b7768ed9d84f1ebd393328b9f97c1cf3d2b94798"
+    integrity sha512-dGjs/lhrWOa+eO0HwgxCSnDm5eMGCsXuvLglMghJq32F6q5LyyNuXb41DHzrg501CKNOSSAHmfB7FDGeUnDmzw==
+    dependencies:
+      joi "*"
+  
   "@types/json-schema@^7.0.9":
     version "7.0.11"
     resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.11.tgz"
@@ -1023,7 +1022,7 @@ Lockfile:
   
   "@types/jsonwebtoken@^9.0.1":
     version "9.0.1"
-    resolved "https://registry.npmjs.org/@types/jsonwebtoken/-/jsonwebtoken-9.0.1.tgz"
+    resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-9.0.1.tgz#29b1369c4774200d6d6f63135bf3d1ba3ef997a4"
     integrity sha512-c5ltxazpWabia/4UzhIoaDcIza4KViOQhdbjRlfcIGVnsE3c3brkz9Z+F/EeJIECOQP7W7US2hNE930cWWkPiw==
     dependencies:
       "@types/node" "*"
@@ -1035,7 +1034,7 @@ Lockfile:
   
   "@types/morgan@^1.9.4":
     version "1.9.4"
-    resolved "https://registry.npmjs.org/@types/morgan/-/morgan-1.9.4.tgz"
+    resolved "https://registry.yarnpkg.com/@types/morgan/-/morgan-1.9.4.tgz#99965ad2bdc7c5cee28d8ce95cfa7300b19ea562"
     integrity sha512-cXoc4k+6+YAllH3ZHmx4hf7La1dzUk6keTR4bF4b4Sc0mZxU/zK4wO7l+ZzezXm/jkYj/qC+uYGZrarZdIVvyQ==
     dependencies:
       "@types/node" "*"
@@ -1941,12 +1940,7 @@ Lockfile:
     dependencies:
       function-bind "^1.1.1"
   
-  helmet@*:
-    version "6.0.1"
-    resolved "https://registry.npmjs.org/helmet/-/helmet-6.0.1.tgz"
-    integrity sha512-8wo+VdQhTMVBMCITYZaGTbE4lvlthelPYSvoyNvk4RECTmrVjMerp9RfUOQXZWLvCcAn1pKj7ZRxK4lI9Alrcw==
-  
-  helmet@^6.0.1:
+  helmet@*, helmet@^6.0.1:
     version "6.0.1"
     resolved "https://registry.yarnpkg.com/helmet/-/helmet-6.0.1.tgz#52ec353638b2e87f14fe079d142b368ac11e79a4"
     integrity sha512-8wo+VdQhTMVBMCITYZaGTbE4lvlthelPYSvoyNvk4RECTmrVjMerp9RfUOQXZWLvCcAn1pKj7ZRxK4lI9Alrcw==
@@ -2054,7 +2048,7 @@ Lockfile:
     resolved "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz"
     integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
   
-  joi@^17.7.0:
+  joi@*, joi@^17.7.0:
     version "17.7.0"
     resolved "https://registry.yarnpkg.com/joi/-/joi-17.7.0.tgz#591a33b1fe1aca2bc27f290bcad9b9c1c570a6b3"
     integrity sha512-1/ugc8djfn93rTE3WRKdCzGGt/EtiYKxITMO4Wiv6q5JL1gl9ePt4kBsl1S499nbosspfctIQTpYIhSmHA3WAg==

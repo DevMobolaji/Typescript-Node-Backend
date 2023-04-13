@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express"
-import HttpException from "@/utils/exceptions/http.exception"
+import HttpException from "@/utils/exceptions/errors/http.exception"
+import CustomError from "@/utils/exceptions/errors"
 
 function authorizedRole(...roles: string[]) {
     return (
@@ -8,7 +9,7 @@ function authorizedRole(...roles: string[]) {
         next: NextFunction
     ): void => {
         if (!roles.includes(req.user.roles)) {
-            throw new HttpException(400, "you're not authorized")
+            throw new CustomError.BadRequestError("Please verify your email")
         }
         next()
     }
