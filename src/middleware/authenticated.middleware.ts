@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction, Router } from "express";
-import { verifyToken } from "@/utils/Token";
+import { Request, Response, NextFunction } from "express";
+import { verifyToken } from "@/misc/Token";
 import userModel from "@/resources/Auth/auth.model";
 import Token from "@/utils/interfaces/token.interface";
 import jwt from "jsonwebtoken";

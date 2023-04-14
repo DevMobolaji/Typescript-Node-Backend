@@ -4,8 +4,13 @@ import cors from "cors";
 import Controller from "@/utils/interfaces/controller.interface";
 import helmet from "helmet";
 import morgan from "morgan";
+import xss from 'xss-clean';
+import mongoSanitize from 'express-mongo-sanitize';
 import ErrorMiddleware from "@/middleware/error.middleware";
-import { mongoConnect } from "@/utils/mongoConnect"
+import { mongoConnect } from "@/misc/mongoConnect"
+import session from "express-session"
+import store from "@/misc/store"
+
 
 
 class App {
@@ -29,6 +34,9 @@ class App {
         this.express.use(express.json());
         this.express.use(express.urlencoded({ extended: false }));
         this.express.use(compression());
+        this.express.use(xss());
+        this.express.use(mongoSanitize());
+        this.express.use(session(store))
     }
 
     private initializeController(controllers: Controller[]): void {
@@ -55,3 +63,4 @@ class App {
 
 
 export default App;
+

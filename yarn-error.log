@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add http-status-code
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add @types/xss-clean
 
 PATH: 
   C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\Git\cmd;C:\Program Files\Docker\Docker\resources\bin;C:\Users\Tech Prof\scoop\shims;C:\Users\Tech Prof\AppData\Local\Microsoft\WindowsApps;;C:\Users\Tech Prof\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Tech Prof\AppData\Roaming\npm;C:\Users\Tech Prof\AppData\Local\Yarn\bin;C:\Program Files\heroku\bin;C:\Users\Tech Prof\AppData\Local\Microsoft\WindowsApps
@@ -14,8 +14,17 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: getaddrinfo ENOTFOUND registry.yarnpkg.com
-      at GetAddrInfoReqWrap.onlookup [as oncomplete] (node:dns:107:26)
+  Error: https://registry.yarnpkg.com/@types%2fxss-clean: Not found
+      at params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:66096:18)
+      at self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:140748:22)
+      at Request.emit (node:events:513:28)
+      at Request.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:141720:10)
+      at Request.emit (node:events:513:28)
+      at IncomingMessage.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:141642:12)
+      at Object.onceWrapper (node:events:627:28)
+      at IncomingMessage.emit (node:events:525:35)
+      at endReadableNT (node:internal/streams/readable:1359:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
 
 npm manifest: 
   {
@@ -56,18 +65,23 @@ npm manifest:
     "dependencies": {
       "bcryptjs": "^2.4.3",
       "compression": "^1.7.4",
+      "cookie-parser": "^1.4.6",
       "cors": "^2.8.5",
       "dotenv": "^16.0.3",
       "envalid": "^7.3.1",
       "express": "^4.18.2",
+      "express-mongo-sanitize": "^2.2.0",
       "helmet": "^6.0.1",
+      "http-status-code": "^2.1.0",
+      "http-status-codes": "^2.2.0",
       "joi": "^17.7.0",
       "jsonwebtoken": "^9.0.0",
       "module-alias": "^2.2.2",
       "mongoose": "^6.9.0",
       "morgan": "^1.10.0",
       "nodemon": "^2.0.20",
-      "ts-node": "^10.9.1"
+      "ts-node": "^10.9.1",
+      "xss-clean": "^0.1.1"
     },
     "_moduleAliases": {
       "@/resources": "dist/resources",
@@ -1422,10 +1436,23 @@ Lockfile:
     resolved "https://registry.npmjs.org/content-type/-/content-type-1.0.5.tgz"
     integrity sha512-nTjqfcBFEipKdXCv4YDQWCfmcLZKm81ldF0pAopTvyrFGVbcR6P/VAAd5G7N+0tTr8QqiU0tFadD6FK4NtJwOA==
   
+  cookie-parser@^1.4.6:
+    version "1.4.6"
+    resolved "https://registry.yarnpkg.com/cookie-parser/-/cookie-parser-1.4.6.tgz#3ac3a7d35a7a03bbc7e365073a26074824214594"
+    integrity sha512-z3IzaNjdwUC2olLIB5/ITd0/setiaFMLYiZJle7xg5Fe9KWAceil7xszYfHHBtDFYLSgJduS2Ty0P1uJdPDJeA==
+    dependencies:
+      cookie "0.4.1"
+      cookie-signature "1.0.6"
+  
   cookie-signature@1.0.6:
     version "1.0.6"
     resolved "https://registry.npmjs.org/cookie-signature/-/cookie-signature-1.0.6.tgz"
     integrity sha512-QADzlaHc8icV8I7vbaJXJwod9HWYp8uCqf1xa4OfNu1T7JVxQIrUgOWtHdNDtPiywmFbiS12VjotIXLrKM3orQ==
+  
+  cookie@0.4.1:
+    version "0.4.1"
+    resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.4.1.tgz#afd713fe26ebd21ba95ceb61f9a8116e50a537d1"
+    integrity sha512-ZwrFkGJxUR3EIoXtO+yVE69Eb7KlixbaeAWfBQB9vVsNn/o+Yw69gBWSSDK825hQNdN+wF8zELf3dFNl/kxkUA==
   
   cookie@0.5.0:
     version "0.5.0"
@@ -1699,6 +1726,11 @@ Lockfile:
       stream-combiner "~0.0.4"
       through "~2.3.1"
   
+  express-mongo-sanitize@^2.2.0:
+    version "2.2.0"
+    resolved "https://registry.yarnpkg.com/express-mongo-sanitize/-/express-mongo-sanitize-2.2.0.tgz#c8c2d45e137f213950f70bf586704e0db5cfe356"
+    integrity sha512-PZBs5nwhD6ek9ZuP+W2xmpvcrHwXZxD5GdieX2dsjPbAbH4azOkrHbycBud2QRU+YQF1CT+pki/lZGedHgo/dQ==
+  
   express@^4.18.2:
     version "4.18.2"
     resolved "https://registry.npmjs.org/express/-/express-4.18.2.tgz"
@@ -1955,6 +1987,18 @@ Lockfile:
       setprototypeof "1.2.0"
       statuses "2.0.1"
       toidentifier "1.0.1"
+  
+  http-status-code@^2.1.0:
+    version "2.1.0"
+    resolved "https://registry.yarnpkg.com/http-status-code/-/http-status-code-2.1.0.tgz#3e0dc85ea4369cf4cbdb1bc4447d2b4114bd4d3a"
+    integrity sha512-xlSRDG0i4j2HDR85FW2VGxFBo9GB1LpBp37/gldjrS5ZlAaHp1h0dbq96crIN/D0ur1jAa75ACrN8WezebLXSw==
+    dependencies:
+      strip-json-comments "^1.0.2"
+  
+  http-status-codes@^2.2.0:
+    version "2.2.0"
+    resolved "https://registry.yarnpkg.com/http-status-codes/-/http-status-codes-2.2.0.tgz#bb2efe63d941dfc2be18e15f703da525169622be"
+    integrity sha512-feERVo9iWxvnejp3SEfm/+oNG517npqL2/PIA8ORjyOZjGC7TwCRQsZylciLS64i6pJ0wRYz3rkXLRwbtFa8Ng==
   
   iconv-lite@0.4.24:
     version "0.4.24"
@@ -2714,6 +2758,11 @@ Lockfile:
     dependencies:
       ansi-regex "^5.0.1"
   
+  strip-json-comments@^1.0.2:
+    version "1.0.4"
+    resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-1.0.4.tgz#1e15fbcac97d3ee99bf2d73b4c656b082bbafb91"
+    integrity sha512-AOPG8EBc5wAikaG1/7uFCNFJwnKOuQwFTpYBdTW6OvWHeZBQBrAA/amefHGrEiOnCPcLFZK6FUPtWVKpQVIRgg==
+  
   strip-json-comments@^3.1.0, strip-json-comments@^3.1.1:
     version "3.1.1"
     resolved "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-3.1.1.tgz"
@@ -2916,6 +2965,18 @@ Lockfile:
     version "1.0.2"
     resolved "https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz"
     integrity sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==
+  
+  xss-clean@^0.1.1:
+    version "0.1.1"
+    resolved "https://registry.yarnpkg.com/xss-clean/-/xss-clean-0.1.1.tgz#d3ba684d85ccd52054963d01ad6ab36d662db1a5"
+    integrity sha512-On99yydxoAEkHpraR7Wjg9cD6UmKfbtH2HXO1it2djid32osHL7Qr8bIu+dGYoOeKzf3ZszLfz1gwR/D7whZ2A==
+    dependencies:
+      xss-filters "1.2.6"
+  
+  xss-filters@1.2.6:
+    version "1.2.6"
+    resolved "https://registry.yarnpkg.com/xss-filters/-/xss-filters-1.2.6.tgz#68b39089cb1dff8b9dbc889484839b2f507f5c55"
+    integrity sha512-uqgwZRpVJCDfHsRX9lDrkPyCitQYzPklmLSbajJncATZKAUd1tF1x9y2VyPNFMv8SsSWed80xorSS5qGpw3WiA==
   
   yallist@^4.0.0:
     version "4.0.0"

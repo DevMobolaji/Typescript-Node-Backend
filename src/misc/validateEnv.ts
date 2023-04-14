@@ -12,6 +12,8 @@ function validateEnvVariables(): void {
         MONGO_USER: str(),
         PORT: port({ default: 3000 }),
         JWT_SECRET: str(),
+        SESSION_NAME: str(),
+        SESSION_SECRET: str()
     })
 }
 
