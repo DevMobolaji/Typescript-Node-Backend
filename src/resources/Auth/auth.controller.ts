@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction, Router } from "express";
 import Controller from "@/utils/interfaces/controller.interface";
-import HttpException from "@/utils/exceptions/errors/http.exception";
 import validationMiddleware from "@/middleware/validation.middleware";
 import validate from "@/resources/Auth/auth.validation";
 import UserService from "@/resources/Auth/auth.service"
@@ -9,6 +8,8 @@ import authenticatedMiddleware from "@/middleware/authenticated.middleware";
 import asyncHandler from "@/middleware/asyncHandler.middleware";
 import checkPermission from "middleware/permission.middleware";
 import CustomError from "@/utils/exceptions/errors"
+import { redis } from "@/misc/redis";
+import { userSessionIdPrefix } from "misc/constants";
 
 
 class AuthController implements Controller {
@@ -54,6 +55,15 @@ class AuthController implements Controller {
         const { email, password } = req.body;
 
         const token = await this.UserService.login(email, password);
+
+        const { userId, userRole } = token;
+        req.session.userId = userId;
+        req.session.role = userRole;
+
+        if (req.sessionID) {
+            await redis.lpush(`${userSessionIdPrefix}${userId}`, req.sessionID)
+        }
+
         res.status(200).json({ token })
     })
 

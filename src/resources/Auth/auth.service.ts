@@ -1,4 +1,4 @@
-import token from "@/utils/Token";
+import token from "@/misc/Token";
 import userModels from "@/resources/Auth/auth.model";
 import CustomError from "@/utils/exceptions/errors"
 
@@ -12,10 +12,9 @@ class UserService {
             throw new CustomError.BadRequestError("User with that email already exist")
         }
         const user = await this.user.create({ name, email, password })
-        const savedUser = await user.save()
         const accessToken = token.createToken(user)
 
-        const { email: userEmail, name: userName, isVerified: userVerified, roles: userRole } = savedUser
+        const { email: userEmail, name: userName, isVerified: userVerified, roles: userRole } = user
 
         return {
             accessToken,
@@ -26,7 +25,7 @@ class UserService {
         };
     }
 
-    public async login(email: string, password: string): Promise<string | Error> {
+    public async login(email: string, password: string) {
         const user = await this.user.findOne({ email })
 
         if (!user) {
@@ -36,11 +35,20 @@ class UserService {
         if (!user.isVerified) {
             throw new CustomError.BadRequestError("Please verify your email")
         }
+        const validPass = await user.isValidPassword(password)
 
-        if (await user.isValidPassword(password)) {
-            return token.createToken(user)
-        } else {
+        if (!validPass) {
             throw new CustomError.BadRequestError("wrong credentials given")
+        }
+        const userToken = token.createToken(user)
+        const { id: userId, email: userEmail, name: userName, isVerified: userVerified, roles: userRole } = user
+        return {
+            userToken,
+            userEmail,
+            userName,
+            userVerified,
+            userRole,
+            userId
         }
     }
 

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "@/resources/Auth/auth.interface";
-import Token from "./interfaces/token.interface";
+import Token from "@/utils/interfaces/token.interface";
 
 export const createToken = (user: User): string => {
     return jwt.sign({ id: user._id }, process.env.JWT_SECRET as jwt.Secret, {
