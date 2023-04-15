@@ -1,15 +1,15 @@
 import { Request, Response, NextFunction, Router } from "express";
-import Controller from "@/utils/interfaces/controller.interface";
+import Controller from "interfaces/controller.interface";
 import validationMiddleware from "@/middleware/validation.middleware";
-import validate from "@/resources/Auth/auth.validation";
-import UserService from "@/resources/Auth/auth.service"
+import validate from "@/services/AuthServices/auth.validation";
+import UserService from "@/services/AuthServices/auth.service"
 import authorizedRole from "@/middleware/authorizedRole.middleware"
 import authenticatedMiddleware from "@/middleware/authenticated.middleware";
 import asyncHandler from "@/middleware/asyncHandler.middleware";
 import checkPermission from "middleware/permission.middleware";
 import CustomError from "@/utils/exceptions/errors"
-import { redis } from "@/misc/redis";
-import { userSessionIdPrefix } from "misc/constants";
+import { redis } from "@/configs/redis";
+import { userSessionIdPrefix } from "@/configs/constants";
 
 
 class AuthController implements Controller {
@@ -56,14 +56,9 @@ class AuthController implements Controller {
 
         const token = await this.UserService.login(email, password);
 
-        const { userId, userRole } = token;
-        req.session.userId = userId;
-        req.session.role = userRole;
+        const { userRole, refreshToken } = token;
 
-        if (req.sessionID) {
-            await redis.lpush(`${userSessionIdPrefix}${userId}`, req.sessionID)
-        }
-
+        res.cookie(process.env.SESSION_NAME as string, refreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
         res.status(200).json({ token })
     })
 

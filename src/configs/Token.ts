@@ -1,12 +1,20 @@
+import Token from "@/interfaces/token.interface";
+import User from "@/services/AuthServices/auth.interface";
 import jwt from "jsonwebtoken";
-import User from "@/resources/Auth/auth.interface";
-import Token from "@/utils/interfaces/token.interface";
+
 
 export const createToken = (user: User): string => {
+    return jwt.sign({ id: user._id }, process.env.JWT_SECRET as jwt.Secret, {
+        expiresIn: '15m',
+    })
+}
+
+export const refreshToken = (user: User): string => {
     return jwt.sign({ id: user._id }, process.env.JWT_SECRET as jwt.Secret, {
         expiresIn: '1d',
     })
 }
+
 
 export const verifyToken = async (token: string): Promise<jwt.VerifyErrors | Token> => {
     return new Promise((resolve, reject) => {
@@ -18,4 +26,4 @@ export const verifyToken = async (token: string): Promise<jwt.VerifyErrors | Tok
     })
 }
 
-export default { createToken, verifyToken }
+export default { createToken, verifyToken, refreshToken }

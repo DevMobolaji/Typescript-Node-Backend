@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express"
-import HttpException from "@/utils/exceptions/errors/http.exception"
 import CustomError from "@/utils/exceptions/errors"
 
 function authorizedRole(...roles: string[]) {

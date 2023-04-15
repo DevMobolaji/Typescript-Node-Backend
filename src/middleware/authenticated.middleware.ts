@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { verifyToken } from "@/misc/Token";
-import userModel from "@/resources/Auth/auth.model";
-import Token from "@/utils/interfaces/token.interface";
+import Token from "interfaces/token.interface";
 import jwt from "jsonwebtoken";
+
+
 import CustomError from "@/utils/exceptions/errors"
+import { verifyToken } from "@/configs/Token";
+import userModel from "@/services/AuthServices/auth.model"
 
 async function authenticatedMiddleware(
     req: Request,

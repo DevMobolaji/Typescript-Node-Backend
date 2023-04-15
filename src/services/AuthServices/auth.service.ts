@@ -1,6 +1,7 @@
-import token from "@/misc/Token";
-import userModels from "@/resources/Auth/auth.model";
+
+import userModels from "@/services/AuthServices/auth.model";
 import CustomError from "@/utils/exceptions/errors"
+import token from "@/configs/Token"
 
 class UserService {
     private user = userModels;
@@ -40,15 +41,15 @@ class UserService {
         if (!validPass) {
             throw new CustomError.BadRequestError("wrong credentials given")
         }
-        const userToken = token.createToken(user)
-        const { id: userId, email: userEmail, name: userName, isVerified: userVerified, roles: userRole } = user
+        const accessToken = token.createToken(user)
+        const refreshToken = token.refreshToken(user)
+
+        const { email: userEmail, name: userName, isVerified: userVerified, roles: userRole } = user
         return {
-            userToken,
+            accessToken,
+            refreshToken,
             userEmail,
             userName,
-            userVerified,
-            userRole,
-            userId
         }
     }
 

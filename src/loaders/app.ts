@@ -1,15 +1,16 @@
 import express, { Application } from "express";
 import compression from "compression";
 import cors from "cors";
-import Controller from "@/utils/interfaces/controller.interface";
 import helmet from "helmet";
 import morgan from "morgan";
 import xss from 'xss-clean';
 import mongoSanitize from 'express-mongo-sanitize';
+import cookieParser from "cookie-parser";
+
+// Default imports
+import Controller from "@/interfaces/controller.interface";
 import ErrorMiddleware from "@/middleware/error.middleware";
-import { mongoConnect } from "@/misc/mongoConnect"
-import session from "express-session"
-import store from "@/misc/store"
+import { mongoConnect } from "@/configs/mongoConnect";
 
 
 
@@ -36,7 +37,7 @@ class App {
         this.express.use(compression());
         this.express.use(xss());
         this.express.use(mongoSanitize());
-        this.express.use(session(store))
+        this.express.use(cookieParser())
     }
 
     private initializeController(controllers: Controller[]): void {

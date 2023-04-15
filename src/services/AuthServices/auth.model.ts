@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 import bcryptjs from "bcryptjs";
-import User from "@/resources/Auth/auth.interface";
+import User from "@/services/AuthServices/auth.interface";
 
 const userSchema = new Schema({
     name: {

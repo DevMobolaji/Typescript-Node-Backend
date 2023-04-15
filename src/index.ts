@@ -1,9 +1,10 @@
 import 'dotenv/config'
 import 'module-alias/register'
-import App from "./app";
-import PostController from '@/resources/post/post.controller';
-import validateEnvVariables from '@/misc/validateEnv';
-import AuthController from '@/resources/Auth/auth.controller';
+import validateEnvVariables from '@/configs/validateEnv';
+import App from '@/loaders/app';
+import AuthController from '@/services/AuthServices/auth.controller';
+import PostController from '@/services/PostService/post.controller';
+
 
 validateEnvVariables();
 
