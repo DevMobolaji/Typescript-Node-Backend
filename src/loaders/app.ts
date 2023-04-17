@@ -11,6 +11,7 @@ import cookieParser from "cookie-parser";
 import Controller from "@/interfaces/controller.interface";
 import ErrorMiddleware from "@/middleware/error.middleware";
 import { mongoConnect } from "@/configs/mongoConnect";
+import { redis } from "@/configs/redis";
 
 
 
@@ -22,12 +23,12 @@ class App {
         this.express = express();
         this.port = port;
 
-        this.initializeDatabaseConnection();
         this.initializeMiddleware();
         this.initializeController(controllers);
         this.initializeErrorMiddleware();
     }
 
+    // Initialize all Middleware
     private initializeMiddleware(): void {
         this.express.use(helmet());
         this.express.use(cors());
@@ -40,19 +41,22 @@ class App {
         this.express.use(cookieParser())
     }
 
+    // Initialize Controller handlers
     private initializeController(controllers: Controller[]): void {
         controllers.forEach((controller: Controller) => {
             this.express.use("/api", controller.router)
         });
     }
 
+    // Initialize Error middleware
     private initializeErrorMiddleware(): void {
         this.express.use(ErrorMiddleware);
     }
 
-    private initializeDatabaseConnection(): void {
+    public async initializeDatabaseConnection(): Promise<void> {
         //initialize mongodb connection
-        mongoConnect()
+        await mongoConnect()
+        redis
     }
 
     public listen(): void {

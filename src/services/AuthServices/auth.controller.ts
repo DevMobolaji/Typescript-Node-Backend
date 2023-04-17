@@ -32,6 +32,8 @@ class AuthController implements Controller {
             validationMiddleware(validate.Login),
             this.login);
 
+
+        this.router.post(`${this.path}/refresh`, this.refreshToken)
         this.router.get(`${this.path}/alluser`, authenticatedMiddleware, authorizedRole("Admin"), this.getUser)
         this.router.get(`${this.path}/:id`, authenticatedMiddleware, authorizedRole("Admin"), this.getSingleUser)
     };
@@ -56,10 +58,24 @@ class AuthController implements Controller {
 
         const token = await this.UserService.login(email, password);
 
-        const { userRole, refreshToken } = token;
+        const { userRole, refreshToken, accessToken, userName, userEmail } = token;
 
-        res.cookie(process.env.SESSION_NAME as string, refreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
-        res.status(200).json({ token })
+
+        res.cookie(process.env.SESSION_NAME as string, refreshToken, {
+            httpOnly: true,
+            //For production the secure policy should be set to true
+            secure: false,
+            sameSite: 'none',
+            maxAge: 24 * 60 * 60 * 1000
+        });
+
+        res.status(200).json({ accessToken, userRole, userName, userEmail })
+    })
+
+    private refreshToken = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        const cookies = req.cookies;
+
+        const cookie = await this.UserService.refreshToken(cookies);
     })
 
     private getUser = asyncHandler(async (

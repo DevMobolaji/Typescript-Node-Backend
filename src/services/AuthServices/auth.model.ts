@@ -25,6 +25,9 @@ const userSchema = new Schema({
         enum: ["Admin", "User"],
         default: "User",
     },
+    refreshToken: {
+        type: String
+    },
 }, { timestamps: true }
 )
 

@@ -8,9 +8,12 @@ import PostController from '@/services/PostService/post.controller';
 
 validateEnvVariables();
 
-const app = new App([
-    new PostController(),
-    new AuthController()],
+const app = new App([new PostController(), new AuthController()],
     Number(process.env.PORT))
 
-app.listen()
+const start = async () => {
+    await app.initializeDatabaseConnection();
+    app.listen()
+}
+
+start()

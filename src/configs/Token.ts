@@ -26,4 +26,14 @@ export const verifyToken = async (token: string): Promise<jwt.VerifyErrors | Tok
     })
 }
 
+export const refresh = async (token: string, user: User) => {
+    return new Promise((resolve, reject) => {
+        jwt.verify(token, process.env.jwt_SECRET as jwt.Secret, (err, decoded) => {
+            if (err) return reject(err)
+
+            createToken(user)
+        })
+    })
+}
+
 export default { createToken, verifyToken, refreshToken }
