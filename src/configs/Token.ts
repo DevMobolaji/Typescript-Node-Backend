@@ -1,16 +1,17 @@
 import Token from "@/interfaces/token.interface";
 import User from "@/services/AuthServices/auth.interface";
 import jwt from "jsonwebtoken";
+import { Types } from "mongoose";
 
 
 export const createToken = (user: User): string => {
-    return jwt.sign({ id: user._id }, process.env.JWT_SECRET as jwt.Secret, {
+    return jwt.sign({ id: user._id, role: user.roles }, process.env.JWT_SECRET as jwt.Secret, {
         expiresIn: '15m',
     })
 }
 
 export const refreshToken = (user: User): string => {
-    return jwt.sign({ id: user._id }, process.env.JWT_SECRET as jwt.Secret, {
+    return jwt.sign({ id: user._id, role: user.roles }, process.env.JWT_SECRET as jwt.Secret, {
         expiresIn: '1d',
     })
 }
@@ -26,14 +27,13 @@ export const verifyToken = async (token: string): Promise<jwt.VerifyErrors | Tok
     })
 }
 
-export const refresh = async (token: string, user: User) => {
-    return new Promise((resolve, reject) => {
-        jwt.verify(token, process.env.jwt_SECRET as jwt.Secret, (err, decoded) => {
-            if (err) return reject(err)
+export const refresh = async (token: string) => {
+    return jwt.verify(token, process.env.jwt_SECRET as jwt.Secret, (err: any, payload) => {
+        if (err) return console.log(err)
 
-            createToken(user)
+        return jwt.sign({ id: payload }, process.env.JWT_SECRET as jwt.Secret, {
+            expiresIn: '15m',
         })
     })
 }
-
-export default { createToken, verifyToken, refreshToken }
+export default { createToken, verifyToken, refreshToken, refresh }

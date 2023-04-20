@@ -1,4 +1,3 @@
-
 import userModels from "@/services/AuthServices/auth.model";
 import CustomError from "@/utils/exceptions/errors"
 import token from "@/configs/Token"
@@ -64,12 +63,15 @@ class UserService {
             throw new CustomError.UnauthenticatedError("Uauthenticated")
         }
 
-        const refreshToken = cookies.jwt
+        const refreshToken: string = cookies.qid
+
 
         const foundUser = await this.user.findOne({ refreshToken })
+
         if (!foundUser) throw new CustomError.UnauthorizedError("Unauthorized")
 
-        await refresh(refreshToken, foundUser)
+        const newRefreshToken = await token.refresh(refreshToken)
+        return newRefreshToken;
     }
 
     public async getSingleUser(id: string) {

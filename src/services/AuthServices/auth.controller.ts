@@ -75,7 +75,9 @@ class AuthController implements Controller {
     private refreshToken = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const cookies = req.cookies;
 
-        const cookie = await this.UserService.refreshToken(cookies);
+        const accessToken = await this.UserService.refreshToken(cookies);
+
+        res.status(200).json({ accessToken })
     })
 
     private getUser = asyncHandler(async (

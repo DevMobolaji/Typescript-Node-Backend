@@ -6,7 +6,6 @@ import jwt from "jsonwebtoken";
 import CustomError from "@/utils/exceptions/errors"
 import { verifyToken } from "@/configs/Token";
 import userModel from "@/services/AuthServices/auth.model"
-
 async function authenticatedMiddleware(
     req: Request,
     res: Response,
