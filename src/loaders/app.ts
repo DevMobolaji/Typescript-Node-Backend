@@ -1,15 +1,17 @@
 import express, { Application } from "express";
 import compression from "compression";
 import cors from "cors";
-import Controller from "@/utils/interfaces/controller.interface";
 import helmet from "helmet";
 import morgan from "morgan";
 import xss from 'xss-clean';
 import mongoSanitize from 'express-mongo-sanitize';
+import cookieParser from "cookie-parser";
+
+// Default imports
+import Controller from "@/interfaces/controller.interface";
 import ErrorMiddleware from "@/middleware/error.middleware";
-import { mongoConnect } from "@/misc/mongoConnect"
-import session from "express-session"
-import store from "@/misc/store"
+import { mongoConnect } from "@/configs/mongoConnect";
+import { redis } from "@/configs/redis";
 
 
 
@@ -21,12 +23,12 @@ class App {
         this.express = express();
         this.port = port;
 
-        this.initializeDatabaseConnection();
         this.initializeMiddleware();
         this.initializeController(controllers);
         this.initializeErrorMiddleware();
     }
 
+    // Initialize all Middleware
     private initializeMiddleware(): void {
         this.express.use(helmet());
         this.express.use(cors());
@@ -36,22 +38,25 @@ class App {
         this.express.use(compression());
         this.express.use(xss());
         this.express.use(mongoSanitize());
-        this.express.use(session(store))
+        this.express.use(cookieParser())
     }
 
+    // Initialize Controller handlers
     private initializeController(controllers: Controller[]): void {
         controllers.forEach((controller: Controller) => {
             this.express.use("/api", controller.router)
         });
     }
 
+    // Initialize Error middleware
     private initializeErrorMiddleware(): void {
         this.express.use(ErrorMiddleware);
     }
 
-    private initializeDatabaseConnection(): void {
+    public async initializeDatabaseConnection(): Promise<void> {
         //initialize mongodb connection
-        mongoConnect()
+        await mongoConnect()
+        redis
     }
 
     public listen(): void {

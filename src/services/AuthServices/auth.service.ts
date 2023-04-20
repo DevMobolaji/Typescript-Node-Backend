@@ -1,10 +1,11 @@
-import token from "@/misc/Token";
-import userModels from "@/resources/Auth/auth.model";
+import userModels from "@/services/AuthServices/auth.model";
 import CustomError from "@/utils/exceptions/errors"
+import token from "@/configs/Token"
 
 class UserService {
     private user = userModels;
 
+    // Logic for registering a new User
     public async register(name: string, email: string, password: string) {
         const userAlredyExists = await this.user.findOne({ email })
 
@@ -12,12 +13,10 @@ class UserService {
             throw new CustomError.BadRequestError("User with that email already exist")
         }
         const user = await this.user.create({ name, email, password })
-        const accessToken = token.createToken(user)
 
         const { email: userEmail, name: userName, isVerified: userVerified, roles: userRole } = user
 
         return {
-            accessToken,
             userEmail,
             userName,
             userVerified,
@@ -25,6 +24,7 @@ class UserService {
         };
     }
 
+    // Logic for login in a new User
     public async login(email: string, password: string) {
         const user = await this.user.findOne({ email })
 
@@ -32,24 +32,46 @@ class UserService {
             throw new CustomError.BadRequestError("Unable to find user with that email address")
         }
 
-        if (!user.isVerified) {
-            throw new CustomError.BadRequestError("Please verify your email")
-        }
+        // if (!user.isVerified) {
+        //     throw new CustomError.BadRequestError("Please verify your email")
+        // }
         const validPass = await user.isValidPassword(password)
 
         if (!validPass) {
             throw new CustomError.BadRequestError("wrong credentials given")
         }
-        const userToken = token.createToken(user)
-        const { id: userId, email: userEmail, name: userName, isVerified: userVerified, roles: userRole } = user
+
+        const accessToken = token.createToken(user)
+        const refreshToken = token.refreshToken(user)
+
+        user.refreshToken = refreshToken;
+        const result = await user.save()
+
+
+        const { email: userEmail, name: userName, roles: userRole } = result
         return {
-            userToken,
+            accessToken,
+            refreshToken,
             userEmail,
             userName,
-            userVerified,
-            userRole,
-            userId
+            userRole
         }
+    }
+
+    public async refreshToken(cookies: any) {
+        if (!cookies) {
+            throw new CustomError.UnauthenticatedError("Uauthenticated")
+        }
+
+        const refreshToken: string = cookies.qid
+
+
+        const foundUser = await this.user.findOne({ refreshToken })
+
+        if (!foundUser) throw new CustomError.UnauthorizedError("Unauthorized")
+
+        const newRefreshToken = await token.refresh(refreshToken)
+        return newRefreshToken;
     }
 
     public async getSingleUser(id: string) {
